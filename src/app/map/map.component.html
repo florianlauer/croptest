@@ -1,0 +1,7 @@
+<agm-map [latitude]="50.6333" [longitude]="3.0667">
+    <div *ngFor="let device of devices">
+        <agm-marker [latitude]="device.location.latitude" [longitude]="device.location.longitude"
+        [iconUrl]="numberMarkerImg"
+         [label]="device.contents.name"></agm-marker>
+    </div>
+</agm-map>

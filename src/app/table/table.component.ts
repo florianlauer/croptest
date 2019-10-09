@@ -1,4 +1,3 @@
-import { Device } from './../model/device';
 import { ApiService } from './../api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';

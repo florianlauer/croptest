@@ -38,9 +38,13 @@ export class ApiService {
     );
   }
 
-  getRainCropStats(): Observable<Measures> {
+  getRainCropStats(measureType?: string): Observable<Measures> {
+
+    if (measureType === undefined) {
+        measureType = 'TEMPERATURE';
+    }
     // tslint:disable-next-line:max-line-length
-    return this.httpClient.get<any>(`${this.apiEndpoint}/users/${this.userId}/devices/${this.rainCropId}/statistics?startDate=2019-10-05T11:49:48Z&endDate=2019-10-06T11:49:48Z&measures=RELATIVE_HUMIDITY&measures=TEMPERATURE`, { headers: this.headers }).pipe(
+    return this.httpClient.get<any>(`${this.apiEndpoint}/users/${this.userId}/devices/${this.rainCropId}/statistics?startDate=2019-10-05T11:49:48Z&endDate=2019-10-06T11:49:48Z&measures=${measureType}`, { headers: this.headers }).pipe(
       map(data => data.measures)
     );
   }

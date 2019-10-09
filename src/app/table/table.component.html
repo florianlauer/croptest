@@ -1,4 +1,11 @@
-<div class="container-fluid">
+<div class="container-fluid pt-4">
+    <div class="row">
+        <div class="col-2">
+            <select #typeSelect (change)="refreshCall(typeSelect.value)" class="custom-select custom-select-sm mb-3" >
+                <option *ngFor="let value of measureTypes" [value]="value">{{value}}</option>
+            </select>
+        </div>
+    </div>
     <div class="col-2 offset-4 mt-4">
         <table class="table" *ngIf="measures">
             <thead class="bg-green">
@@ -7,8 +14,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let measure of measures.data">
-                    <td>{{measure.TEMPERATURE.value | number}}</td>
+                <tr *ngFor="let measure of data">
+                    <td>{{measure | number}}</td>
                 </tr>
             </tbody>
         </table>

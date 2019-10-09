@@ -1,6 +1,6 @@
 import { ApiService } from './../api.service';
 import { Measures } from './../model/measures';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Chart } from 'Chart.js';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.scss']
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   chart: any;
@@ -19,50 +19,65 @@ export class GraphComponent implements OnInit {
   measures: Measures;
   tempData: number[] = new Array();
   labels: any[] = [];
+  measureTypes = ['TEMPERATURE', 'RELATIVE_HUMIDITY', 'WET_TEMPERATURE', 'RAIN_FALL'];
+  selectedValue = 'TEMPERATURE';
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.subscription = this.apiService.getRainCropStats().subscribe((m: Measures) => {
+    this.subscription = this.apiService.getRainCropStats(this.selectedValue).subscribe((m: Measures) => {
       this.measures = m;
-      console.log(this.measures.data);
       this.measures.data.forEach((element, i) => {
-        this.tempData.push(element.TEMPERATURE.value);
+        this.tempData.push(element[this.selectedValue].value);
         this.labels.push(i.toString());
       });
-      console.log(this.tempData);
-      console.log(this.labels);
-
-        this.chart = new Chart(this.canvas.nativeElement.getContext('2d'), {
-          type: 'line',
-          data: {
-            labels: this.labels,
-            datasets: [
-              {
-                label: 'Temperature',
-                data: this.tempData,
-                borderColor: '#00AEFF',
-                fill: false
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            legend: {
-              display: false
-            },
-            scales: {
-              xAxes: [{
-                display: true,
-              }]
-            }
-          }
-        });
+      this.buildChart();
     });
   }
 
+  refreshCall(value: string) {
+    this.tempData = [];
+    this.selectedValue = value;
+    this.subscription = this.apiService.getRainCropStats(this.selectedValue).subscribe((m: Measures) => {
+      this.measures = m;
+      this.measures.data.forEach(element => {
+        this.tempData.push(element[this.selectedValue].value);
+      });
+      this.buildChart();
+    });
+  }
 
+  buildChart() {
+    this.chart = new Chart(this.canvas.nativeElement.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: this.labels,
+        datasets: [
+          {
+            label: this.selectedValue,
+            data: this.tempData,
+            borderColor: '#00AEFF',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+          }]
+        }
+      }
+    });
+  }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
 
 }

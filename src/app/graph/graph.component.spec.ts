@@ -1,3 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AppComponent } from './../app.component';
+import { AgmCoreModule } from '@agm/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GraphComponent } from './graph.component';
@@ -8,7 +11,11 @@ describe('GraphComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GraphComponent ]
+      imports: [HttpClientTestingModule],
+      declarations: [ GraphComponent ],
+      providers: [
+
+      ]
     })
     .compileComponents();
   }));

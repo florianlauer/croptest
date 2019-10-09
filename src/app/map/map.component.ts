@@ -15,20 +15,17 @@ export class MapComponent implements OnInit, OnDestroy {
 
   numberMarkerImg = {
     url: 'assets/sensor.svg',
-    scaledSize: {height: 48, width: 48},
-    labelOrigin: { x: 90, y : 20}
-};
+    scaledSize: { height: 48, width: 48 },
+    labelOrigin: { x: 90, y: 20 }
+  };
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
 
     this.subscription = this.apiService.getDevices().subscribe((data: Device[]) => {
-      console.log(data);
       this.devices = data;
     });
-
-
   }
 
   ngOnDestroy() {

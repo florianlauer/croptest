@@ -1,3 +1,5 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapComponent } from './map.component';
@@ -8,9 +10,16 @@ describe('MapComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapComponent ]
+      imports: [
+        AgmCoreModule.forRoot(),
+        HttpClientTestingModule
+      ],
+      declarations: [MapComponent],
+      providers: [
+        MockMapsAPILoader
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,4 +31,13 @@ describe('MapComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });
+
+export class MockMapsAPILoader {
+  public load(): Promise<boolean> {
+    return new Promise(() => {
+      return true;
+    });
+  }
+}

@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import { Device } from './model/device';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
@@ -18,8 +19,7 @@ export class ApiService {
   private apiEndpoint = 'https://api.sencrop.com/v1/';
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
-    // tslint:disable-next-line:max-line-length
-    'Authorization': 'Bearer 2b5e21450c81d52d4e3a77331347883d196d61ca155a223ca9e0608008455f8a8675daed220c04de9b19358fc65988d311365a5b2b1ed5297c5e2d9fada04d5b2a8c0dc33bc767caa5dc3b4b5d202c50fbdc0bbcf2b50e295fadfebd74d144656e8b67bce8abce48573908938a418811ccaa125a506799bd62b36eba299825ac'
+    'Authorization': 'Bearer ' + environment['AUTH_TOKEN']
   });
   private userId = 64779;
   private rainCropId = 5551;
